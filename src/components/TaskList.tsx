@@ -2,8 +2,11 @@ import { useState } from 'react'
 
 import '../styles/tasklist.scss'
 
+import {ErrorBox} from './ErrorBox'
+
 import { FiTrash, FiCheckSquare } from 'react-icons/fi'
 import { isCompositeComponent } from 'react-dom/test-utils';
+
 
 interface Task {
   id: number;
@@ -15,6 +18,7 @@ export function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [newTaskId, setNewTaskId] = useState(0);
+  const [showError, setShowError] = useState(false);
 
 
   function handleNewTaskId(){
@@ -24,6 +28,11 @@ export function TaskList() {
   function handleCreateNewTask() {
     // Crie uma nova task com um id random, não permita criar caso o título seja vazio.
     handleNewTaskId();
+    if ( newTaskTitle === ''){
+      setShowError(true)
+      return;
+    }
+    setShowError(false)
     setTasks([...tasks, {
       id: newTaskId,
       title: newTaskTitle,
@@ -39,15 +48,19 @@ export function TaskList() {
 
   function handleRemoveTask(id: number) {
     // Remova uma task da listagem pelo ID
+    let filteredTasks = tasks.filter(task => task.id !== id) 
+    setTasks(filteredTasks)
   }
 
   return (
     <section className="task-list container">
+      { showError ? <ErrorBox/> : ''}
       <header>
         <h2>Minhas tasks</h2>
 
         <div className="input-group">
           <input 
+            className={showError? 'error':''}
             type="text" 
             placeholder="Adicionar novo todo" 
             onChange={(e) => setNewTaskTitle(e.target.value)}
