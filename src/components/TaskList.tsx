@@ -47,6 +47,18 @@ export function TaskList() {
     let indexRecord = tasks.findIndex(task => task.id === id);
     let elToUpdate = tasks[tasks.findIndex(task => task.id === id)];
 
+    if(elToUpdate.isComplete === true){
+      elToUpdate.isComplete = false;
+      tasks.splice(indexRecord,0,elToUpdate);
+
+      const resultArr = tasks.filter((data,index)=>{
+        return tasks.indexOf(data) === index;
+      })
+
+      setTasks(resultArr);
+      return;
+    }
+
     elToUpdate.isComplete = true;
     tasks.splice(indexRecord,0,elToUpdate);
 
