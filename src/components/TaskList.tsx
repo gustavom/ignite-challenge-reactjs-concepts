@@ -29,6 +29,8 @@ export function TaskList() {
       title: newTaskTitle,
       isComplete: false,
     }])
+    // limpando o valor do campo de texto
+    setNewTaskTitle('');
   }
 
   function handleToggleTaskCompletion(id: number) {
