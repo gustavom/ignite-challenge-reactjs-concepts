@@ -3,6 +3,7 @@ import { useState } from 'react'
 import '../styles/tasklist.scss'
 
 import { FiTrash, FiCheckSquare } from 'react-icons/fi'
+import { isCompositeComponent } from 'react-dom/test-utils';
 
 interface Task {
   id: number;
@@ -13,9 +14,21 @@ interface Task {
 export function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState('');
+  const [newTaskId, setNewTaskId] = useState(0);
+
+
+  function handleNewTaskId(){
+    return setNewTaskId(Math.ceil(Math.random() * 10000)) 
+  }
 
   function handleCreateNewTask() {
     // Crie uma nova task com um id random, não permita criar caso o título seja vazio.
+    handleNewTaskId();
+    setTasks([...tasks, {
+      id: newTaskId,
+      title: newTaskTitle,
+      isComplete: false,
+    }])
   }
 
   function handleToggleTaskCompletion(id: number) {
